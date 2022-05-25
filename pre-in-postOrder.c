@@ -16,6 +16,8 @@ struct node* createNode(int data)
     return NODE;
 }
 // ----------------
+// preorde-234675
+// -------------------
 void preorder(struct node* root)
 {
     if(root!=NULL)
@@ -26,6 +28,8 @@ void preorder(struct node* root)
     }
 }
 // -----------------
+// postorder-764352
+// ----------------
 void postOrder(struct node* root)
 {
     if(root!=NULL)
@@ -36,6 +40,8 @@ void postOrder(struct node* root)
     }
 }
 // -------------------------
+//-inoreder-764325
+// ------------------------
 void inOrder(struct node* root)
 {
     if(root!=NULL)
