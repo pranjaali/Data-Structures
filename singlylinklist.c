@@ -1,80 +1,176 @@
-#include<stdio.h>
-#include<stdlib.h>
-typedef struct node NODE;
-typedef NODE* PNODE;
-typedef PNODE* PPNODE;
-
-// -----------------------
-struct node{
-int data;
-NODE *link;
-
+#include <stdio.h>
+#include <stdlib.h>
+struct node
+{
+    int data;
+    struct node *link;
 };
-// ------------------------
-int insertNode(PPNODE head,int data)
+// ====================(COUNT NODES IN LINKLIST FUNCTION)=========
+int countNodes(struct node **head)
 {
-    PNODE temp=NULL;
-    temp=(PNODE)malloc(sizeof(NODE));
-    temp->data=data;
-    temp->link=NULL;
-
-    if(*head==NULL)
+    int count = 0;
+    struct node *temp = (*head);
+    if (temp == NULL)
     {
-      *head=temp;
+        return count;
     }
-    else{
-        temp->link=*head;
-        *head=temp;
-
-    }
-
-
-}
-// ------------------------
-int insertEND(PPNODE head,int thisdata)
-{
-    PNODE temp=NULL;
-    PNODE new=*head;
-    temp=(PNODE)malloc(sizeof(NODE));
-    temp->data=thisdata;
-    temp->link=NULL;
-
-    if(*head==NULL)
+    else
     {
-       *head=temp; 
-    }
-    else{
-        while(new->link!=NULL)
+        count = 1;
+        while (temp->link != NULL)
         {
-            new=new->link;
+            temp=temp->link;
+            count++;
         }
-        new->link=temp;
-
-
+        return count;
     }
 }
-
-// ------------------------
-void Display(PNODE head)
+// =======================(INSERSION FUNCTIONS)===============================
+void insertFirst(struct node **head, int data)
 {
-    while(head!=NULL)
+    struct node *newn = (struct node *)malloc(sizeof(struct node));
+    newn->data = data;
+    newn->link = NULL;
+    if ((*head) == NULL)
     {
+        (*head) = newn;
+    }
+    else
+    {
+        newn->link = *head;
 
-       printf("%d\t",head->data);
-       head=head->link;
+        (*head) = newn;
+    }
+}
+// -------
+void insertAtLAst(struct node **head, int data)
+{
+    struct node *temp = (*head);
+    struct node *newn = (struct node *)malloc(sizeof(struct node));
+    newn->data = data;
+    newn->link = NULL;
+    if ((*head) == NULL)
+    {
+        (*head) = newn;
+    }
+    else
+    {
+        while (temp->link != NULL)
+        {
+            temp = temp->link;
+        }
+        temp->link = newn;
+        newn->link = NULL;
+    }
+}
+// ----------------------------
+void insertAtPOsition1(struct node **head, int position, int data)
+{
+    int nPosi = position - 1;
+    struct node *temp = (*head);
+    struct node *newn = (struct node *)malloc(sizeof(struct node));
+    newn->data = data;
+    newn->link = NULL;
+    if (position == 1)
+    {
+        insertFirst(&(*head), data);
+        // newn->link=temp;
+        // (*head)=newn;
+    }
+    else
+    {
+        while (nPosi > 1)
+        {
+            temp = temp->link;
+            nPosi--;
+        }
+        newn->link = temp->link;
+        temp->link = newn;
+    }
+}
+// ----------------------------
+// ====================(DELETION FUNCTIONS)=======================
+void deletFirst(struct node **head)
+{
+    struct node *temp = (*head);
+    (*head) = temp->link;
+    free(temp);
+}
+void deleteLast(struct node **head)
+{
+    struct node *temp = (*head), *ptr = temp;
+    while (temp->link != NULL)
+    {
+        ptr = temp;
+        temp = temp->link;
+    }
+    ptr->link = NULL;
+    free(temp);
+}
+void deleteAtPosition(struct node **head, int position)
+{
+    int countnodes=countNodes(&(*head));
+    if (position == 1)
+    {
+        deletFirst(&(*head));
+    }
+    else if(position>countnodes)
+    {
+        printf("\nLIST LIST HAS %d NODE",countnodes);
+        printf("\n%d th NODE DOSENT EXIST:\n",position);
+    }
+    else
+    {
+        struct node *temp = (*head), *ptr = temp;
+        int nPos = position;
+        while (nPos > 1)
+        {
+            ptr = temp;
+            temp = temp->link;
+            --nPos;
+        }
+        ptr->link = temp->link;
+        free(temp);
     }
 }
 
+// ====================(DISPLAY FUNCTION)=========================
+void display(struct node **head)
+{   
+    if (*head == NULL)
+    {
+        printf("the list is empty:\n");
+    }
+    else
+    {
+        struct node *temp;
+        temp = *head;
+        while (temp != NULL)
+        {
+            printf("[%d]-->", temp->data);
+            temp = temp->link;
+        }
+    }
+}
+// --------------
 
-// -------------------------
 int main()
 {
-   PNODE newNode=NULL;
-   insertNode(&newNode,79);
-   insertEND(&newNode,6);
-   
-   insertNode(&newNode,7);
-   Display(newNode);
+    struct node *first = NULL;
+
+    insertFirst(&first, 1);
+    insertFirst(&first, 2);
+    insertFirst(&first, 3);
+    insertFirst(&first, 4);
+    insertAtPOsition1(&first, 1, 5);
+    insertAtLAst(&first, 6);
+    insertAtPOsition1(&first, 3, 7);
+    deletFirst(&first);
+    deleteLast(&first);
+    deleteAtPosition(&first, 7);
+    display(&first);
+    int cnt = countNodes(&first);
+    printf("\nnodes are-%d", cnt);
 
     return 0;
 }
