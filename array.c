@@ -1,5 +1,3 @@
-# Data-Structures
-using-c,c++,java
 #include<stdio.h>
 int num=0;
 int display(int *ptr)
@@ -92,7 +90,7 @@ void deletePossition(int *ptr)
 {   int possition;
     printf("enter the possition:\n");
     scanf("%d",&possition);
-   for(int i=(possition-1);i<num;i--)
+   for(int i=(possition-1);i<num;i++)
    {
        ptr[i]=ptr[i+1];
 
@@ -110,11 +108,11 @@ int main()
     {
         scanf("%d",&arr[i]);
     }
-    insertAtend(&arr[0]);
-    insertAtPossition(&arr[0]);
-     deleteFirst(&arr[0]);
-    deleteLast(&arr[0]);
-    // deletePossition(&arr[0]);
+    // insertAtend(&arr[0]);
+    // insertAtPossition(&arr[0]);
+    //  deleteFirst(&arr[0]);
+    // deleteLast(&arr[0]);
+    deletePossition(&arr[0]);
     // ==========DISPLAY ARRAY=========
     display(&arr[0]);
     
