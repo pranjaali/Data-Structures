@@ -1,96 +1,166 @@
 # Data-Structures
-using-c,c++,java
-#include<stdio.h>
-#define size 5
-int arr[size];
-int front=-1,rare=-1;
-// ==================  INQUEUE  ===================================== 
-void inqueue(int data)
+#include <iostream>
+using namespace std;
+
+class node
 {
-    if(rare==(size-1))
+public:
+    int data;
+    node *next;
+    node(int data)
     {
-        printf("CAN NOT PERFORM\nOVERFLOW CONDITON");
+        this->data = data;
+        next = NULL;
     }
-    else if(front==-1 && rare==-1)
-    {   
-        rare=front=0;
-        arr[rare]=data;
-    
+    friend class nodeFun;
+};
+
+class nodeFun
+{
+private:
+    node *temp, *front, *rare, *newn;
+
+public:
+    void inqueue(int data);
+    void dequeue();
+    void peek();
+    void display();
+    int count();
+    nodeFun()
+    {
+        newn = NULL;
+        front = NULL;
+        temp = NULL;
+        rare = NULL;
+    }
+};
+// =======================================================================
+// --------------inqueue------------------------------------------------
+void nodeFun::inqueue(int data)
+{
+    newn = new node(data);
+
+    if (front == NULL && rare == NULL)
+    {
+        front = rare = newn;
     }
     else
-    { rare++;
-        arr[rare]=data;
+    {
+        rare->next = newn;
+        rare = newn;
     }
+}
+void nodeFun::dequeue()
+{
+    temp = front;
+    if (front == NULL && rare == NULL)
+    {
+        cout << "UNDERFLOW CONDITION:\n";
+    }
+    else
+    {
+        temp = front;
+        cout << "DEQUED ELEMENT WAS:" << front->data << endl;
+        front = front->next;
+        delete (temp);
+    }
+}
+void nodeFun::peek()
+{
+    if (front == NULL && rare == NULL)
+    {
+        cout << "QUEUE IS EMPTY\n";
+    }
+    else
+    {
+        cout << "FRONT ELEMENT OF WUEUE IS: [" << front->data << "]" << endl;
+    }
+}
 
-}
-// ==================  DEQUEUE  =====================================
-void dequeue()
+void nodeFun::display()
 {
-    if(front==-1 && rare==-1)
+
+    if (front == NULL && rare == NULL)
     {
-        printf("QUEUE IS EMPTY \n CAN'T PERFORM DEQUEUE OPERATION");
+        cout << "QUEUE IS EMPTY:\n";
     }
-    else if(front<size)
+    else
     {
-         printf("\ndequed element is %d\n",arr[front]);
-        arr[front]=0;
-        front++;
-    }
-    else{
-        printf("QUEUE IS EMPTY\n");
+        temp = front;
+        while (temp != NULL)
+        {
+            cout << "[" << temp->data << "]";
+            temp = temp->next;
+        }
     }
 }
-// ==================  PEEK     =====================================
-int peek()
+int nodeFun::count()
 {
-    if(front==-1 && rare==-1)
+    int count = 0;
+    if (front == NULL && rare == NULL)
     {
-        printf("\nQUEUE IS EMPTY:\n");
+        cout << "QUEUE IS EMPTY:\n";
         return 0;
     }
-    else{
-        printf("[%d]",arr[front]);
-        return arr[front];
-    }
-}
-// ==================  DISPLAY  =====================================
-void display()
-{    printf("\n");
-    for(int i=0;i<=rare;i++)
+    else
     {
-        printf("[%d]-",arr[i]);
+        temp = front;
+        while (front != NULL)
+        {
+            count++;
+            front = front->next;
+        }
+        return count;
     }
-    printf("\n");
 }
+
+// =======================================================================
 int main()
-{   char choice=0;
+{
+    nodeFun obj;
     int data;
-    do{ printf("\n===========================================================\n");
-        printf("\t\t1.INQUEUE\n\t\t2.DEQUEUE\n\t\t3.PEEK\n\t\t4.DISPLAY\n\t\t5.EXIT\n\t\tENETER OPERATION NUMBER YOU WANT TO PERFORM\n");
-        scanf("%c",&choice);
-        switch(choice)
-        {   case '1':
-            {   printf("\nENTER THE DATA:\n");
-                scanf("%d",&data);
-                inqueue(data);
-                break;
-            }
-            case '2':
-            {   dequeue();
-                break;
-            }
-            case '3':
-            {   int topData=0;
-                topData=peek();
-                break;
-            }
-            case '4':
-            {display();
-                break;
-            }
-            case '5':
-            {break;
-            }}
-    }while(choice!='5');
-    return 0;
+
+    char choice;
+    do
+    {
+        cout << "\n===========================================================\n";
+        cout << "\t\t1.INQUEUE\n\t\t2.DEQUEUE\n\t\t3.PEEK\n\t\t4.DISPLAY\n\t\t5.COUNT\n\t\t6.EXIT\n\t\tENETER OPERATION NUMBER YOU WANT TO PERFORM\n";
+        cin >> choice;
+        switch (choice)
+        {
+        case '1':
+        {
+            cout << "\nENTER THE DATA:\n";
+            cin >> data;
+            obj.inqueue(data);
+            break;
+        }
+        case '2':
+        {
+            obj.dequeue();
+            break;
+        }
+        case '3':
+        {
+            obj.peek();
+            break;
+        }
+        case '4':
+        {
+            obj.display();
+            break;
+        }
+        case '5':
+        {
+            int cnt;
+            cnt = obj.count();
+            cout << "COUNT OF ELEMENTS IN QUEUE IS :" << cnt << endl;
+            break;
+        }
+        case '6':
+        {
+            break;
+        }
+        }
+    } while (choice != '6');
 }
